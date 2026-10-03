@@ -1,0 +1,19 @@
+{
+  "name": "Weather check",
+  "nodes": [
+    {"id": "a1", "name": "When clicking ‘Execute workflow’", "type": "n8n-nodes-base.manualTrigger", "typeVersion": 1, "position": [0, 0], "parameters": {}},
+    {"id": "a2", "name": "Get weather", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.5, "position": [260, 0],
+     "parameters": {"url": "https://api.open-meteo.com/v1/forecast?latitude=40.42&longitude=-3.70&current=temperature_2m,wind_speed_10m", "options": {}}},
+    {"id": "a3", "name": "Keep what matters", "type": "n8n-nodes-base.set", "typeVersion": 3.4, "position": [520, 0],
+     "parameters": {"assignments": {"assignments": [
+        {"id": "f1", "name": "city", "value": "Madrid", "type": "string"},
+        {"id": "f2", "name": "temperature", "value": "={{ $json.current.temperature_2m }}", "type": "number"},
+        {"id": "f3", "name": "wind", "value": "={{ $json.current.wind_speed_10m }}", "type": "number"}
+     ]}, "options": {}}}
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {"main": [[{"node": "Get weather", "type": "main", "index": 0}]]},
+    "Get weather": {"main": [[{"node": "Keep what matters", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"}
+}
